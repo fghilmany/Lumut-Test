@@ -4,7 +4,8 @@ import android.content.Context
 import com.fghilmany.mvvmstarterproject.R
 import com.fghilmany.mvvmstarterproject.core.data.remote.network.ApiResponse
 import com.fghilmany.mvvmstarterproject.core.data.remote.network.ApiServices
-import com.fghilmany.mvvmstarterproject.core.data.remote.response.EmailResponse
+import com.fghilmany.mvvmstarterproject.core.data.remote.response.TodosResponse
+import com.fghilmany.mvvmstarterproject.core.data.remote.response.TodosResponseItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.json.JSONObject
@@ -18,18 +19,33 @@ class RemoteDatasource(
     private val apiServices: ApiServices?,
     private val context: Context
 ) {
-    //example get email
-    suspend fun getEmail(email: String): Flow<ApiResponse<EmailResponse>> {
+
+    suspend fun getTodos(): Flow<ApiResponse<List<TodosResponseItem>>> {
         return flow {
             try {
-                val response = apiServices?.getEmail(email)
+                val response = apiServices?.getTodos()
                 if (response != null){
                     emit(ApiResponse.Success(response))
                 }else{
                     emit(ApiResponse.Empty)
                 }
             }catch (e: Exception){
-                exceptionLog(e, "getEmail")
+                exceptionLog(e, "getTodos")
+            }
+        }
+    }
+
+    suspend fun getDetailTodos(id: String): Flow<ApiResponse<TodosResponseItem>> {
+        return flow {
+            try {
+                val response = apiServices?.getDetailTodos(id)
+                if (response != null){
+                    emit(ApiResponse.Success(response))
+                }else{
+                    emit(ApiResponse.Empty)
+                }
+            }catch (e: Exception){
+                exceptionLog(e, "getDetailTodos")
             }
         }
     }

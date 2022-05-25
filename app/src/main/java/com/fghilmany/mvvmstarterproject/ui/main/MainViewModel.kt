@@ -1,17 +1,22 @@
 package com.fghilmany.mvvmstarterproject.ui.main
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.*
 import com.fghilmany.mvvmstarterproject.core.data.DataRepository
+import timber.log.Timber
 
-class MainViewModel(val dataRepository: DataRepository): ViewModel() {
+class MainViewModel(private val dataRepository: DataRepository): ViewModel() {
 
-    private var _email = MutableLiveData<String>()
-    var email get() = _email
-    set(value) {
-        _email.postValue(value.value)
+    var id = MutableLiveData<String>()
+
+    init {
+        id.value = "1"
     }
 
-    fun getEmailOnline() = email.value?.let { dataRepository.getEmailOnline(it) }?.asLiveData()
+    fun setId(id: String){
+        this.id.value = id
+    }
+
+    fun getTodos() =  dataRepository.getTodos().asLiveData()
+
+    fun getDetailTodos() = dataRepository.getDetailTodos(id.value.toString()).asLiveData()
 }
